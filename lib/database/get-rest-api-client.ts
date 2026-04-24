@@ -16,7 +16,7 @@ export const getServerAuthenticatedClient = async (): Promise<{
     // getToken triggers jwt callback - auto-refreshes if expired
     const token = await getToken({
       req: { headers: await headers() } as NextRequest,
-      secret: process.env.NEXT_AUTH_SECRET,
+      secret: process.env.NEXTAUTH_SECRET,
     });
 
     if (!token?.access_token) {

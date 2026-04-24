@@ -4,10 +4,11 @@ import { NextRequest, NextResponse } from "next/server";
 export async function withAuth(request: NextRequest) {
   const token = await getToken({
     req: request,
-    secret: process.env.NEXT_AUTH_SECRET,
+    secret: process.env.NEXTAUTH_SECRET,
   });
 
-  if (!token?.access_token) {
+  // No token found
+  if (!token || !token.access_token) {
     return {
       authenticated: false,
       response: new NextResponse(
@@ -20,11 +21,15 @@ export async function withAuth(request: NextRequest) {
     };
   }
 
+  // Token refresh error - user needs to re-login
   if (token.error === "RefreshAccessTokenError") {
     return {
       authenticated: false,
       response: new NextResponse(
-        JSON.stringify({ error: "Session expired - please login again" }),
+        JSON.stringify({ 
+          error: "Session expired - please login again",
+          code: "TOKEN_REFRESH_ERROR"
+        }),
         {
           status: 401,
           headers: { "Content-Type": "application/json" },

@@ -16,12 +16,29 @@ const handler = NextAuth({
       },
     }),
   ],
+  pages: {
+    signIn: "/",
+    signOut: "/",
+    error: "/",
+  },
   events: {
     async signOut({ token }) {
-      await logoutRequest(token.refresh_token);
+      try {
+        await logoutRequest(token.refresh_token);
+      } catch (error) {
+        console.error("Error during Keycloak logout:", error);
+      }
     },
   },
   callbacks: {
+    async redirect({ url, baseUrl }) {
+      // Allowed redirect destinations
+      if (url.startsWith("/")) return `${baseUrl}${url}`;
+      if (url.startsWith(baseUrl)) return url;
+      
+      // Default redirect to dashboard after login
+      return `${baseUrl}/dashboard`;
+    },
     async jwt({
       token,
       account,
@@ -93,9 +110,14 @@ const handler = NextAuth({
     },
 
     async session({ session, token }) {
-      session.user = token.user;
-      session.access_token = token.access_token;
-      session.error = token.error;
+      // Check for token errors and handle accordingly
+      if (token.error === "RefreshAccessTokenError") {
+        console.warn("⚠️ Session has expired - token refresh failed");
+        session.error = token.error;
+      } else {
+        session.user = token.user;
+        session.access_token = token.access_token;
+      }
       
       return session;
     },

@@ -36,6 +36,16 @@ export const _logoutRequest = (refresh_token: string) => {
   });
 };
 
+type TokenResponse = {
+  access_token: string;
+  refresh_token: string;
+  expires_in: number;
+};
+
+/**
+ * Refresh the access token using the refresh token
+ * @throws Error if refresh fails
+ */
 export async function refreshTokenRequest(refreshToken: string) {
   try {
     const response = await axios.post(
@@ -54,12 +64,6 @@ export async function refreshTokenRequest(refreshToken: string) {
       }
     );
 
-    type TokenResponse = {
-      access_token: string;
-      refresh_token: string;
-      expires_in: number;
-    };
-
     const data = response.data as TokenResponse;
 
     return {
@@ -76,7 +80,16 @@ export async function refreshTokenRequest(refreshToken: string) {
   }
 }
 
+/**
+ * Logout from Keycloak - revokes refresh token
+ * This should be called when user signs out
+ */
 export async function logoutRequest(refreshToken: string) {
+  if (!refreshToken) {
+    console.warn("⚠️ No refresh token provided for logout");
+    return;
+  }
+
   try {
     await axios.post(
       `${process.env.NEXT_PUBLIC_KEYCLOAK_URL}/realms/${process.env.NEXT_PUBLIC_KEYCLOAK_REALM}/protocol/openid-connect/logout`,
@@ -91,7 +104,9 @@ export async function logoutRequest(refreshToken: string) {
         },
       }
     );
+    console.log("✅ Successfully logged out from Keycloak");
   } catch (error) {
-    console.error("❌ Logout failed:", error);
+    console.error("❌ Keycloak logout failed:", error);
+    // Don't throw - logout should still complete even if Keycloak request fails
   }
 }
