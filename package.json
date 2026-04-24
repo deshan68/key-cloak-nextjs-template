@@ -9,6 +9,7 @@
     "lint": "eslint"
   },
   "dependencies": {
+    "@supabase/postgrest-js": "^2.87.0",
     "@types/axios": "^0.9.36",
     "axios": "^1.13.2",
     "keycloak-js": "^26.2.1",

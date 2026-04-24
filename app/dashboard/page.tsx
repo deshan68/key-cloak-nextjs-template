@@ -22,23 +22,6 @@ export default function Dashboard() {
     );
   }
 
-  const handleSignOut = () => {
-    // Construct Keycloak logout URL
-    const keycloakLogoutUrl = new URL(
-      `${process.env.NEXT_PUBLIC_KEYCLOAK_URL}/realms/${process.env.NEXT_PUBLIC_KEYCLOAK_REALM}/protocol/openid-connect/logout`
-    );
-
-    console.log(keycloakLogoutUrl)
-
-    keycloakLogoutUrl.searchParams.set(
-      "post_logout_redirect_uri",
-      window.location.origin
-    );
-
-    // Redirect to Keycloak logout
-    window.location.href = keycloakLogoutUrl.toString();
-  };
-
   return (
     <main className="min-h-screen bg-linear-to-br from-blue-50 to-indigo-100 p-8">
       <div className="max-w-4xl mx-auto">

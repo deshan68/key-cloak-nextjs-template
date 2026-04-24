@@ -18,7 +18,7 @@ const handler = NextAuth({
   ],
   events: {
     async signOut({ token }) {
-      await logoutRequest(token.refresh_token as string);
+      await logoutRequest(token.refresh_token);
     },
   },
   callbacks: {
@@ -30,35 +30,73 @@ const handler = NextAuth({
       token: JWT;
       account: Account | null;
       user: User | null;
-    }) {
-      if (account && account.access_token && account.refresh_token && user) {
-        token.access_token = account.access_token;
-        token.refresh_token = account.refresh_token;
-        token.user = user;
-        return token;
-      } else {
-        try {
-          const response = await refreshTokenRequest(token.refresh_token);
-          const tokenResult = response.data as unknown as JWT;
-          if (response.status !== 200) throw tokenResult;
+    }): Promise<JWT> {
+      // On initial sign in - account exists
+      if (account && user) {
+        console.log("✅ Initial sign in - storing tokens");
 
-          return {
-            ...token,
-            access_token: tokenResult.access_token,
-            refresh_token: tokenResult.refresh_token ?? token.refresh_token,
-            error: null,
-          };
-        } catch (e) {
-          console.error(e);
-          return null as unknown as JWT;
-        }
+        const expiresAt = Math.floor(
+          Date.now() / 1000 + Number(account.expires_in || 3600)
+        );
+
+        return {
+          access_token: account.access_token!,
+          refresh_token: account.refresh_token!,
+          expires_at: expiresAt,
+          user: {
+            id: user.id,
+            sub: user.sub,
+            email: user.email,
+            name: user.name,
+            email_verified: user.email_verified,
+          },
+          error: null,
+        };
+      }
+
+      // Token refresh - check if expired
+      const now = Math.floor(Date.now() / 1000);
+      const isExpired = token.expires_at < now;
+
+      if (!isExpired) {
+        console.log("✅ Token still valid");
+        return token;
+      }
+
+      // Token is expired - attempt refresh
+      console.log("⏰ Token expired, refreshing...");
+
+      try {
+        const response = await refreshTokenRequest(token.refresh_token);
+
+        const newExpiresAt = Math.floor(
+          Date.now() / 1000 + (response.data.expires_in || 3600)
+        );
+
+        console.log("✅ Token refreshed successfully");
+
+        return {
+          ...token,
+          access_token: response.data.access_token,
+          refresh_token: response.data.refresh_token,
+          expires_at: newExpiresAt,
+          error: null,
+        };
+      } catch (error) {
+        console.error("❌ Token refresh failed:", error);
+
+        return {
+          ...token,
+          error: "RefreshAccessTokenError",
+        };
       }
     },
 
     async session({ session, token }) {
       session.user = token.user;
-      session.error = token.error;
       session.access_token = token.access_token;
+      session.error = token.error;
+      
       return session;
     },
   },
