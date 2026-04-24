@@ -1,7 +1,7 @@
 import { PostgrestClient } from "@supabase/postgrest-js";
 import { getToken } from "next-auth/jwt";
 import { headers } from "next/headers";
-import { NextRequest } from "next/server";
+import type { NextRequest } from "next/server";
 
 /**
  * Get authenticated PostgreSQL client (Server-side only)
@@ -73,7 +73,7 @@ export const getServerAuthenticatedClient = async (): Promise<{
  * Use this only in the browser with a valid session
  */
 export const getClientAuthenticatedClient = (
-  accessToken: string
+  accessToken: string,
 ): PostgrestClient | null => {
   const restUrl = process.env.NEXT_PUBLIC_REST_URL;
 
@@ -99,7 +99,7 @@ export const getClientAuthenticatedClient = (
   } catch (error) {
     console.error(
       "Failed to initialize client-side authenticated PostgrestClient:",
-      error
+      error,
     );
     return null;
   }

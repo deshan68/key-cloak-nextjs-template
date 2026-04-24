@@ -51,8 +51,8 @@ export async function refreshTokenRequest(refreshToken: string) {
     const response = await axios.post(
       `${process.env.NEXT_PUBLIC_KEYCLOAK_URL}/realms/${process.env.NEXT_PUBLIC_KEYCLOAK_REALM}/protocol/openid-connect/token`,
       new URLSearchParams({
-        client_id: process.env.NEXT_PUBLIC_KEYCLOAK_ID!,
-        client_secret: process.env.KEYCLOAK_SECRET!,
+        client_id: process.env.NEXT_PUBLIC_KEYCLOAK_ID ?? "",
+        client_secret: process.env.KEYCLOAK_SECRET ?? "",
         grant_type: "refresh_token",
         refresh_token: refreshToken,
       }),
@@ -94,8 +94,8 @@ export async function logoutRequest(refreshToken: string) {
     await axios.post(
       `${process.env.NEXT_PUBLIC_KEYCLOAK_URL}/realms/${process.env.NEXT_PUBLIC_KEYCLOAK_REALM}/protocol/openid-connect/logout`,
       new URLSearchParams({
-        client_id: process.env.NEXT_PUBLIC_KEYCLOAK_ID!,
-        client_secret: process.env.KEYCLOAK_SECRET!,
+        client_id: process.env.NEXT_PUBLIC_KEYCLOAK_ID ?? "",
+        client_secret: process.env.KEYCLOAK_SECRET ?? "",
         refresh_token: refreshToken,
       }),
       {
@@ -104,7 +104,7 @@ export async function logoutRequest(refreshToken: string) {
         },
       }
     );
-    console.log("✅ Successfully logged out from Keycloak");
+    console.warn("Successfully logged out from Keycloak");
   } catch (error) {
     console.error("❌ Keycloak logout failed:", error);
     // Don't throw - logout should still complete even if Keycloak request fails

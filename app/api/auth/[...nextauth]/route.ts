@@ -1,14 +1,15 @@
 import { logoutRequest, refreshTokenRequest } from "@/lib/oidc";
-import NextAuth, { Account, User } from "next-auth";
-import { JWT } from "next-auth/jwt";
+import NextAuth from "next-auth";
+import type { Account, User } from "next-auth";
+import type { JWT } from "next-auth/jwt";
 import KeycloakProvider from "next-auth/providers/keycloak";
 
 const handler = NextAuth({
-  debug: true,
+  debug: process.env.NODE_ENV === "development",
   providers: [
     KeycloakProvider({
-      clientId: process.env.NEXT_PUBLIC_KEYCLOAK_ID!,
-      clientSecret: process.env.KEYCLOAK_SECRET!,
+      clientId: process.env.NEXT_PUBLIC_KEYCLOAK_ID ?? "",
+      clientSecret: process.env.KEYCLOAK_SECRET ?? "",
       issuer: `${process.env.NEXT_PUBLIC_KEYCLOAK_URL}/realms/${process.env.NEXT_PUBLIC_KEYCLOAK_REALM}`,
       profile: (profile) => {
         profile.id = profile.sub;
@@ -32,11 +33,12 @@ const handler = NextAuth({
   },
   callbacks: {
     async redirect({ url, baseUrl }) {
-      // Allowed redirect destinations
-      if (url.startsWith("/")) return `${baseUrl}${url}`;
-      if (url.startsWith(baseUrl)) return url;
-      
-      // Default redirect to dashboard after login
+      if (url.startsWith("/")) {
+        return `${baseUrl}${url}`;
+      }
+      if (url.startsWith(baseUrl)) {
+        return url;
+      }
       return `${baseUrl}/dashboard`;
     },
     async jwt({
@@ -48,17 +50,16 @@ const handler = NextAuth({
       account: Account | null;
       user: User | null;
     }): Promise<JWT> {
-      // On initial sign in - account exists
       if (account && user) {
-        console.log("✅ Initial sign in - storing tokens");
+        console.warn("Initial sign in - storing tokens");
 
         const expiresAt = Math.floor(
-          Date.now() / 1000 + Number(account.expires_in || 3600)
+          Date.now() / 1000 + Number(account.expires_in ?? 3600),
         );
 
         return {
-          access_token: account.access_token!,
-          refresh_token: account.refresh_token!,
+          access_token: account.access_token ?? "",
+          refresh_token: account.refresh_token ?? "",
           expires_at: expiresAt,
           user: {
             id: user.id,
@@ -71,26 +72,24 @@ const handler = NextAuth({
         };
       }
 
-      // Token refresh - check if expired
       const now = Math.floor(Date.now() / 1000);
       const isExpired = token.expires_at < now;
 
       if (!isExpired) {
-        console.log("✅ Token still valid");
+        console.warn("Token still valid");
         return token;
       }
 
-      // Token is expired - attempt refresh
-      console.log("⏰ Token expired, refreshing...");
+      console.warn("Token expired, refreshing...");
 
       try {
         const response = await refreshTokenRequest(token.refresh_token);
 
         const newExpiresAt = Math.floor(
-          Date.now() / 1000 + (response.data.expires_in || 3600)
+          Date.now() / 1000 + (response.data.expires_in ?? 3600),
         );
 
-        console.log("✅ Token refreshed successfully");
+        console.warn("Token refreshed successfully");
 
         return {
           ...token,
@@ -100,7 +99,7 @@ const handler = NextAuth({
           error: null,
         };
       } catch (error) {
-        console.error("❌ Token refresh failed:", error);
+        console.error("Token refresh failed:", error);
 
         return {
           ...token,
@@ -110,15 +109,14 @@ const handler = NextAuth({
     },
 
     async session({ session, token }) {
-      // Check for token errors and handle accordingly
       if (token.error === "RefreshAccessTokenError") {
-        console.warn("⚠️ Session has expired - token refresh failed");
+        console.warn("Session has expired - token refresh failed");
         session.error = token.error;
       } else {
         session.user = token.user;
         session.access_token = token.access_token;
       }
-      
+
       return session;
     },
   },
