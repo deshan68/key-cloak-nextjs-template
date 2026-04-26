@@ -1,11 +1,14 @@
 import type { Metadata } from "next";
 import { Geist, Geist_Mono, Inter } from "next/font/google";
 import "./globals.css";
-import SessionProvider from "@/components/session-provider";
-import { ClientProvider, ReactQueryProvider } from "@/lib/providers";
+import {
+  SessionProvider,
+  ClientProvider,
+  ReactQueryProvider,
+} from "@/components/providers/index";
 import { cn } from "@/lib/utils";
 
-const inter = Inter({subsets:['latin'],variable:'--font-sans'});
+const inter = Inter({ subsets: ["latin"], variable: "--font-sans" });
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
