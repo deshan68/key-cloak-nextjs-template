@@ -1,38 +1,13 @@
 /**
- * API type exports
- * Re-exports types from user.types.ts for API layer usage
+ * API-Specific Type Exports
+ * Re-exports main types from user.types.ts + API-specific utility types
  */
-import type { userService } from ".";
-import type {
-  ApiUserType,
-  CreateUserRequestType,
-  UpdateUserRequestType,
-  UserFiltersType,
-  UsersListResponseType,
-} from "./user.schemas";
+import type { userService } from "./service";
 
-// API User type - shape of data from backend
-export type ApiUser = ApiUserType;
+// Re-export all main types
+export * from "./user.types";
 
-// Request types
-export type CreateUserRequest = CreateUserRequestType;
-export type UpdateUserRequest = UpdateUserRequestType;
-
-// Response types
-export type UsersListResponse = UsersListResponseType;
-
-// Filter types
-export type UserFilters = UserFiltersType;
-
-// Additional utility types
-export type UserRole = string;
-
-// Type for update mutations
-export type UpdateUserVariables = {
-  userId: string;
-  updates: UpdateUserRequest;
-};
-
+// Additional API-specific utility types
 export type DeleteUserResult = Awaited<
   ReturnType<typeof userService.deleteUser>
 >;

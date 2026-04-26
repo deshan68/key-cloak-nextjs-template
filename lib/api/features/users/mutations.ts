@@ -6,6 +6,7 @@ import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { queryKeys } from "@/lib/api/config/query-keys";
 import { userService } from "./service";
 import { usePostgrestClient } from "@/lib/hooks/usePostgrestClient";
+import { USERS_MESSAGES, USERS_QUERY_CONFIG } from "./user.constants";
 import type {
   User,
   CreateUserRequest,
@@ -27,7 +28,7 @@ export function useCreateUser(
   return useMutation<User, Error, CreateUserRequest>({
     mutationFn: async (data: CreateUserRequest) => {
       if (!apiClient) {
-        throw new Error("API client not available");
+        throw new Error(USERS_MESSAGES.serviceErrors.apiClientNotAvailable);
       }
       return userService.createUser(apiClient, data);
     },
@@ -41,8 +42,9 @@ export function useCreateUser(
       queryClient.setQueryData(queryKeys.users.detail(newUser.id), newUser);
     },
     onError: (error) => {
-      console.error("Failed to create user:", error);
+      console.error(USERS_MESSAGES.errors.createFailed, error);
     },
+    retry: USERS_QUERY_CONFIG.retry,
     ...options,
   });
 }
@@ -62,7 +64,7 @@ export function useUpdateUser(
       updates: UpdateUserRequest;
     }) => {
       if (!apiClient) {
-        throw new Error("API client not available");
+        throw new Error(USERS_MESSAGES.serviceErrors.apiClientNotAvailable);
       }
       return userService.updateUser(apiClient, data.userId, data.updates);
     },
@@ -79,8 +81,9 @@ export function useUpdateUser(
       });
     },
     onError: (error) => {
-      console.error("Failed to update user:", error);
+      console.error(USERS_MESSAGES.errors.updateFailed, error);
     },
+    retry: USERS_QUERY_CONFIG.retry,
     ...options,
   });
 }
@@ -97,7 +100,7 @@ export function useDeleteUser(
   return useMutation<DeleteUserResult, Error, string>({
     mutationFn: async (userId: string) => {
       if (!apiClient) {
-        throw new Error("API client not available");
+        throw new Error(USERS_MESSAGES.serviceErrors.apiClientNotAvailable);
       }
       return userService.deleteUser(apiClient, userId);
     },
@@ -113,8 +116,9 @@ export function useDeleteUser(
       });
     },
     onError: (error) => {
-      console.error("Failed to delete user:", error);
+      console.error(USERS_MESSAGES.errors.deleteFailed, error);
     },
+    retry: USERS_QUERY_CONFIG.retry,
     ...options,
   });
 }

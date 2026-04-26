@@ -6,6 +6,7 @@ import type { PostgrestClient } from "@supabase/postgrest-js";
 import type { User } from "./user.types";
 import { userMapper } from "./user.mapper";
 import { UserSafeValidators } from "./user.validators";
+import { USERS_MESSAGES, USERS_PAGINATION } from "./user.constants";
 import type {
   CreateUserRequest,
   UpdateUserRequest,
@@ -39,7 +40,9 @@ export const userService = {
         const validation = UserSafeValidators.safeParseUser(item);
         if (!validation.success) {
           console.error("User validation error:", validation.error);
-          throw new Error(`Invalid user data: ${validation.error.message}`);
+          throw new Error(
+            `${USERS_MESSAGES.serviceErrors.invalidUserData} ${validation.error.message}`,
+          );
         }
       }
     }
@@ -49,8 +52,8 @@ export const userService = {
     return {
       data: mappedData,
       total: (data || []).length,
-      page: params?.page || 1,
-      limit: params?.limit || 10,
+      page: params?.page || USERS_PAGINATION.defaultPage,
+      limit: params?.limit || USERS_PAGINATION.defaultLimit,
     };
   },
 
@@ -74,7 +77,9 @@ export const userService = {
     const validation = UserSafeValidators.safeParseUser(data);
     if (!validation.success) {
       console.error("User validation error:", validation.error);
-      throw new Error(`Invalid user data: ${validation.error.message}`);
+      throw new Error(
+        `${USERS_MESSAGES.serviceErrors.invalidUserData} ${validation.error.message}`,
+      );
     }
 
     return userMapper.toDomain(data);
@@ -100,7 +105,9 @@ export const userService = {
     const validation = UserSafeValidators.safeParseUser(newUser);
     if (!validation.success) {
       console.error("User validation error:", validation.error);
-      throw new Error(`Invalid user data: ${validation.error.message}`);
+      throw new Error(
+        `${USERS_MESSAGES.serviceErrors.invalidUserData} ${validation.error.message}`,
+      );
     }
 
     return userMapper.toDomain(newUser);
@@ -128,7 +135,9 @@ export const userService = {
     const validation = UserSafeValidators.safeParseUser(updatedUser);
     if (!validation.success) {
       console.error("User validation error:", validation.error);
-      throw new Error(`Invalid user data: ${validation.error.message}`);
+      throw new Error(
+        `${USERS_MESSAGES.serviceErrors.invalidUserData} ${validation.error.message}`,
+      );
     }
 
     return userMapper.toDomain(updatedUser);

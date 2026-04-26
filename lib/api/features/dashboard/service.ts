@@ -4,6 +4,7 @@
 import type { PostgrestClient } from "@supabase/postgrest-js";
 import type { DashboardStats, DashboardActivity, DashboardOverview, DashboardActivityFilters } from "./types";
 import { DashboardSafeValidators } from "./validators";
+import { DASHBOARD_PAGINATION } from "./dashboard.constants";
 
 export const dashboardService = {
   /**
@@ -46,7 +47,7 @@ export const dashboardService = {
       query = query.limit(params.limit);
     }
     if (params?.offset) {
-      query = query.range(params.offset, params.offset + (params.limit || 10) - 1);
+      query = query.range(params.offset, params.offset + (params.limit || DASHBOARD_PAGINATION.activitiesLimit) - 1);
     }
     const { data, error } = await query;
     if (error) {
