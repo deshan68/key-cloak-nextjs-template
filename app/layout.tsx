@@ -7,6 +7,7 @@ import {
   ReactQueryProvider,
 } from "@/components/providers/index";
 import { cn } from "@/lib/utils";
+import { ReduxProvider } from "@/components/providers/redux-provider";
 
 const inter = Inter({ subsets: ["latin"], variable: "--font-sans" });
 
@@ -36,9 +37,11 @@ export default function RootLayout({
         className={`${geistSans.variable} ${geistMono.variable} antialiased`}
       >
         <SessionProvider>
-          <ReactQueryProvider>
-            <ClientProvider>{children}</ClientProvider>
-          </ReactQueryProvider>
+          <ReduxProvider>
+            <ReactQueryProvider>
+              <ClientProvider>{children}</ClientProvider>
+            </ReactQueryProvider>
+          </ReduxProvider>
         </SessionProvider>
       </body>
     </html>
