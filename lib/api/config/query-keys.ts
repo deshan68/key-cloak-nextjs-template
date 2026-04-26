@@ -12,8 +12,7 @@ export const queryKeys = {
     list: (filters?: { role?: string; search?: string }) =>
       [...queryKeys.users.lists(), filters] as const,
     details: () => [...queryKeys.users.all, "detail"] as const,
-    detail: (userId: string) =>
-      [...queryKeys.users.details(), userId] as const,
+    detail: (userId: string) => [...queryKeys.users.details(), userId] as const,
     infinite: () => [...queryKeys.users.all, "infinite"] as const,
     infiniteList: (filters?: { role?: string; search?: string }) =>
       [...queryKeys.users.infinite(), filters] as const,
@@ -34,5 +33,18 @@ export const queryKeys = {
     all: ["profile"] as const,
     current: () => [...queryKeys.profile.all, "current"] as const,
     settings: () => [...queryKeys.profile.all, "settings"] as const,
+  },
+
+  // Chats feature
+  chats: {
+    all: ["chats"] as const,
+    lists: () => [...queryKeys.chats.all, "list"] as const,
+    list: (filters?: { chat_type?: string; search?: string; page?: number; limit?: number }) =>
+      [...queryKeys.chats.lists(), filters] as const,
+    infinite: () => [...queryKeys.chats.all, "infinite"] as const,
+    infiniteList: (filters?: { chat_type?: string; search?: string }) =>
+      [...queryKeys.chats.infinite(), filters] as const,
+    detail: (chatId: string) =>
+      [...queryKeys.chats.all, "detail", chatId] as const,
   },
 };

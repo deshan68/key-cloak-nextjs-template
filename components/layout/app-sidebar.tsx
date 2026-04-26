@@ -8,26 +8,17 @@ import {
   useSidebar,
 } from "@/components/ui/sidebar";
 import { SidebarHeaderSection } from "@/components/app-ui/sidebar-header";
-import { ProjectsList } from "../app-ui/sidebar-header/project-list";
+import { ChatList } from "../app-ui/sidebar-header/chat-list";
 
 export function AppSidebar() {
   const [search] = React.useState("");
   const { open } = useSidebar();
 
-  function handleAddProject() {
-    // Wire to your modal / sheet
-    alert("Open add-project dialog");
-  }
-
   return (
     <Sidebar variant="sidebar" collapsible="icon">
       <SidebarHeaderSection />
 
-      <SidebarContent>
-        {open && (
-          <ProjectsList search={search} onAddProject={handleAddProject} />
-        )}
-      </SidebarContent>
+      <SidebarContent>{open && <ChatList search={search} />}</SidebarContent>
 
       <SidebarRail />
     </Sidebar>
