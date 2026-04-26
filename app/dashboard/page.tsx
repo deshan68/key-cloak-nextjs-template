@@ -20,95 +20,49 @@ export default function Dashboard() {
   }
 
   return (
-    <main className="min-h-screen bg-linear-to-br from-blue-50 to-indigo-100 p-8">
-      <Button variant="secondary">Click me</Button>
-      <div className="max-w-4xl mx-auto">
-        <div className="rounded-lg shadow-lg p-8">
-          <div className="flex justify-between items-start mb-8">
-            <div>
-              <h1 className="text-3xl font-bold text-gray-900 mb-2">
-                Dashboard
-              </h1>
-              <p className="text-gray-600">
-                Welcome back,{" "}
-                <strong>{session?.user?.name || session?.user?.email}</strong>
-              </p>
-            </div>
-            <Button
-              onClick={() => signOut({ callbackUrl: "/" })}
-              variant="destructive"
-            >
-              Sign Out
-            </Button>
+    <main className="min-h-screen p-6">
+      <div className="max-w-4xl mx-auto space-y-8">
+        {/* Header */}
+        <div className="flex justify-between items-start">
+          <div>
+            <h1 className="text-2xl font-semibold">Dashboard</h1>
+            <p>
+              Welcome back,{" "}
+              <strong>{session?.user?.name || session?.user?.email}</strong>
+            </p>
           </div>
 
-          <div className="grid md:grid-cols-2 gap-6">
-            {/* User Management Card */}
-            <div className="border border-gray-200 rounded-lg p-6 hover:shadow-md transition">
-              <div className="flex items-center gap-3 mb-4">
-                <div className="bg-blue-100 p-3 rounded-lg">
-                  <svg
-                    className="w-6 h-6 text-blue-600"
-                    fill="none"
-                    stroke="currentColor"
-                    viewBox="0 0 24 24"
-                  >
-                    <path
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                      strokeWidth={2}
-                      d="M18 9v3m0 0v3m0-3h3m-3 0h-3m-2-5a4 4 0 11-8 0 4 4 0 018 0zM3 20a6 6 0 0112 0v1H3v-1z"
-                    />
-                  </svg>
-                </div>
-                <h2 className="text-xl font-semibold text-gray-900">
-                  User Management
-                </h2>
-              </div>
-              <p className="text-gray-600 mb-4">
-                Create and manage user accounts with Keycloak authentication
-              </p>
-              <Link
-                href="/create-user"
-                className="inline-block bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700 transition"
-              >
-                Create New User
-              </Link>
-            </div>
+          <Button onClick={() => signOut({ callbackUrl: "/" })}>
+            Sign Out
+          </Button>
+        </div>
 
-            {/* Profile Card */}
-            <div className="border border-gray-200 rounded-lg p-6 hover:shadow-md transition">
-              <div className="flex items-center gap-3 mb-4">
-                <div className="bg-green-100 p-3 rounded-lg">
-                  <svg
-                    className="w-6 h-6 text-green-600"
-                    fill="none"
-                    stroke="currentColor"
-                    viewBox="0 0 24 24"
-                  >
-                    <path
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                      strokeWidth={2}
-                      d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"
-                    />
-                  </svg>
-                </div>
-                <h2 className="text-xl font-semibold text-gray-900">
-                  User Profile
-                </h2>
-              </div>
-              <p className="text-gray-600 mb-4">
-                View and manage your profile information
+        {/* Grid */}
+        <div className="grid md:grid-cols-2 gap-6">
+          {/* User Management */}
+          <div className="border rounded-lg p-5 space-y-3">
+            <h2 className="text-lg font-medium">User Management</h2>
+            <p className="text-sm">
+              Create and manage user accounts with Keycloak authentication
+            </p>
+
+            <Link href="/create-user">
+              <Button>Create New User</Button>
+            </Link>
+          </div>
+
+          {/* Profile */}
+          <div className="border rounded-lg p-5 space-y-3">
+            <h2 className="text-lg font-medium">User Profile</h2>
+            <p className="text-sm">View and manage your profile information</p>
+
+            <div className="text-sm space-y-1">
+              <p>
+                <strong>Email:</strong> {session?.user?.email}
               </p>
-              <div className="space-y-2">
-                <p className="text-sm">
-                  <strong>Email:</strong> {session?.user?.email}
-                </p>
-                <p className="text-sm">
-                  <strong>Name:</strong> {session?.user?.name}
-                </p>
-              </div>
+              <p>
+                <strong>Name:</strong> {session?.user?.name}
+              </p>
             </div>
           </div>
         </div>
