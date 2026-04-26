@@ -1,11 +1,12 @@
-export interface User {
-  id: string;
-  email: string;
-  firstName: string;
-  lastName: string;
-  role: UserRole;
-  createdAt: string;
-  updatedAt: string;
-}
+import type { ValidatedApiUser } from "./user.validators";
 
-export type UserRole = "app_user" | "app_admin";
+/**
+ * User domain model types are now imported from validators
+ * which uses Zod schemas as the single source of truth
+ */
+export type { User } from "./user.validators";
+
+// Export as primary API user type
+export type ApiUser = ValidatedApiUser;
+
+export type UserRole = string;

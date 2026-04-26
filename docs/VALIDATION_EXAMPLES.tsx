@@ -26,15 +26,15 @@ export function UsersList() {
   // data.data is guaranteed to be User[]
   // All TypeScript checks pass - no 'any' types needed
   return (
-    <div>
+    <div className="font-black bg-red-400">
       {data?.data.map((user: User) => (
         <div key={user.id}>
-          <h3>
-            {user.firstName} {user.lastName}
-          </h3>
+          <h3>{user.name}</h3>
+          <p>Username: {user.userName}</p>
           <p>Email: {user.email}</p>
           <p>Role: {user.role}</p>
-          <p>Created: {user.createdAt}</p>
+          <p>Active: {user.isActive ? "Yes" : "No"}</p>
+          <p>Verified: {user.isVerified ? "Yes" : "No"}</p>
         </div>
       ))}
     </div>
@@ -59,10 +59,11 @@ export function CreateUserForm() {
 
   const handleSubmit = async (formData: FormData) => {
     createUser.mutate({
+      user_name: formData.get("userName") as string,
+      name: formData.get("name") as string,
       email: formData.get("email") as string,
-      first_name: formData.get("firstName") as string,
-      last_name: formData.get("lastName") as string,
-      role: (formData.get("role") as "app_user" | "app_admin") || "app_user",
+      team_id: formData.get("teamId") as string,
+      role: (formData.get("role") as string) || "app_user",
     });
   };
 
@@ -73,13 +74,11 @@ export function CreateUserForm() {
         handleSubmit(new FormData(e.currentTarget));
       }}
     >
+      <input name="userName" placeholder="Username" required />
+      <input name="name" placeholder="Full Name" required />
       <input name="email" type="email" required />
-      <input name="firstName" required />
-      <input name="lastName" required />
-      <select name="role">
-        <option value="app_user">User</option>
-        <option value="app_admin">Admin</option>
-      </select>
+      <input name="teamId" placeholder="Team ID" required />
+      <input name="role" placeholder="Role" />
       <button type="submit" disabled={createUser.isPending}>
         Create User
       </button>

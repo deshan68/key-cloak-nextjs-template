@@ -1,42 +1,20 @@
+/**
+ * API type exports
+ * All types are now inferred from Zod schemas in validators.ts
+ * This ensures single source of truth for all user-related types
+ */
+import type { UpdateUserRequest } from "./user.validators";
 import type { userService } from ".";
-import type { User } from "./user.types";
 
-export interface ApiUser {
-  id: string;
-  email: string;
-  first_name: string;
-  last_name: string;
-  role: "app_user" | "app_admin";
-  created_at: string;
-  updated_at: string;
-}
-
-export interface CreateUserRequest {
-  email: string;
-  first_name: string;
-  last_name: string;
-  role: "app_user" | "app_admin";
-}
-
-export interface UpdateUserRequest {
-  first_name?: string;
-  last_name?: string;
-  role?: "app_user" | "app_admin";
-}
-
-export interface UsersListResponse {
-  data: User[];
-  total: number;
-  page: number;
-  limit: number;
-}
-
-export interface UserFilters {
-  page?: number;
-  limit?: number;
-  role?: "app_user" | "app_admin";
-  search?: string;
-}
+// Re-export types from validators
+export type {
+  ApiUser,
+  CreateUserRequest,
+  UpdateUserRequest,
+  UsersListResponse,
+  UserFilters,
+  User,
+} from "./user.validators";
 
 export type UpdateUserVariables = {
   userId: string;

@@ -6,12 +6,14 @@ import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { queryKeys } from "@/lib/api/config/query-keys";
 import { userService } from "./service";
 import { usePostgrestClient } from "@/lib/hooks/usePostgrestClient";
-import type { User } from "./user.types";
 import type {
+  User,
   CreateUserRequest,
-  DeleteUserResult,
   UpdateUserRequest,
+} from "./user.validators";
+import type {
   UpdateUserVariables,
+  DeleteUserResult,
 } from "./user.api.types";
 import type { UseMutationOptionsWithoutFn } from "@/lib/api/types/query-options";
 

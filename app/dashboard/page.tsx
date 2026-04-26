@@ -23,7 +23,7 @@ export default function Dashboard() {
     <main className="min-h-screen bg-linear-to-br from-blue-50 to-indigo-100 p-8">
       <UsersList />
       <div className="max-w-4xl mx-auto">
-        <div className="bg-white rounded-lg shadow-lg p-8">
+        <div className="rounded-lg shadow-lg p-8">
           <div className="flex justify-between items-start mb-8">
             <div>
               <h1 className="text-3xl font-bold text-gray-900 mb-2">

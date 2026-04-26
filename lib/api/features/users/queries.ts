@@ -5,8 +5,7 @@
 import { useQuery } from "@tanstack/react-query";
 import { queryKeys } from "@/lib/api/config/query-keys";
 import { userService } from "./service";
-import type { UserFilters, UsersListResponse } from "./user.api.types";
-import type { User } from "./user.types";
+import type { UserFilters, UsersListResponse, User } from "./user.validators";
 import { usePostgrestClient } from "@/lib/hooks/usePostgrestClient";
 import type { UseQueryOptionsWithoutKeyAndFn } from "@/lib/api/types/query-options";
 

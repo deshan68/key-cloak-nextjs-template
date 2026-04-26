@@ -8,8 +8,8 @@ import type {
   UpdateUserRequest,
   UsersListResponse,
   UserFilters,
-} from "./user.api.types";
-import type { User } from "./user.types";
+  User,
+} from "./user.validators";
 import { userMapper } from "./user.mapper";
 import { UserSafeValidators } from "./user.validators";
 
@@ -62,7 +62,7 @@ export const userService = {
     userId: string,
   ): Promise<User> => {
     const { data, error } = await apiClient
-      .from("users")
+      .from("app_user")
       .select("*")
       .eq("id", userId)
       .single();
@@ -88,7 +88,7 @@ export const userService = {
     data: CreateUserRequest,
   ): Promise<User> => {
     const { data: newUser, error } = await apiClient
-      .from("users")
+      .from("app_user")
       .insert([data])
       .select()
       .single();
@@ -115,7 +115,7 @@ export const userService = {
     data: UpdateUserRequest,
   ): Promise<User> => {
     const { data: updatedUser, error } = await apiClient
-      .from("users")
+      .from("app_user")
       .update(data)
       .eq("id", userId)
       .select()
@@ -141,7 +141,10 @@ export const userService = {
     apiClient: PostgrestClient,
     userId: string,
   ): Promise<void> => {
-    const { error } = await apiClient.from("users").delete().eq("id", userId);
+    const { error } = await apiClient
+      .from("app_user")
+      .delete()
+      .eq("id", userId);
     if (error) {
       throw error;
     }

@@ -5,12 +5,14 @@ export const userMapper = {
   toDomain(api: ApiUser): User {
     return {
       id: api.id,
+      userName: api.user_name,
+      name: api.name,
+      dpUrl: api.dp_url,
       email: api.email,
-      firstName: api.first_name,
-      lastName: api.last_name,
+      teamId: api.team_id,
       role: api.role,
-      createdAt: new Date(api.created_at).toISOString(),
-      updatedAt: new Date(api.updated_at).toISOString(),
+      isActive: api.is_active,
+      isVerified: api.is_verified,
     };
   },
 };
