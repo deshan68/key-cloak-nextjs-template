@@ -3,22 +3,23 @@
  * React Query hooks for user queries (read operations)
  */
 import { useQuery } from "@tanstack/react-query";
-import type { UseQueryOptions } from "@tanstack/react-query";
 import { queryKeys } from "@/lib/api/config/query-keys";
 import { userService } from "./service";
-import type { UserFilters } from "./user.api.types";
+import type { UserFilters, UsersListResponse } from "./user.api.types";
+import type { User } from "./user.types";
 import { usePostgrestClient } from "@/lib/hooks/usePostgrestClient";
+import type { UseQueryOptionsWithoutKeyAndFn } from "@/lib/api/types/query-options";
 
 /**
  * Hook to fetch paginated list of users
  */
 export function useGetUsers(
   params?: UserFilters,
-  options?: Omit<UseQueryOptions, "queryKey" | "queryFn">,
+  options?: UseQueryOptionsWithoutKeyAndFn<UsersListResponse>,
 ) {
   const apiClient = usePostgrestClient();
 
-  return useQuery({
+  return useQuery<UsersListResponse, Error>({
     queryKey: queryKeys.users.list(params),
     queryFn: async () => {
       if (!apiClient) {
@@ -36,11 +37,11 @@ export function useGetUsers(
  */
 export function useGetUserById(
   userId: string | undefined,
-  options?: Omit<UseQueryOptions, "queryKey" | "queryFn">,
+  options?: UseQueryOptionsWithoutKeyAndFn<User>,
 ) {
   const apiClient = usePostgrestClient();
 
-  return useQuery({
+  return useQuery<User, Error>({
     queryKey: queryKeys.users.detail(userId || ""),
     queryFn: async () => {
       if (!apiClient || !userId) {

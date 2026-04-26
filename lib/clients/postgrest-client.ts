@@ -13,6 +13,7 @@ export function createPostgrestClient(bearerToken?: string): PostgrestClient {
 
   const client = new PostgrestClient(postgrestUrl, {
     headers: {
+      "Accept-Profile": "emvia",
       "Content-Type": "application/json",
       ...(bearerToken && { Authorization: `Bearer ${bearerToken}` }),
     },

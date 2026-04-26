@@ -2,21 +2,21 @@
  * Dashboard Query Hooks
  */
 import { useQuery } from "@tanstack/react-query";
-import type { UseQueryOptions } from "@tanstack/react-query";
 import { queryKeys } from "@/lib/api/config/query-keys";
 import { dashboardService } from "./service";
-import type { DashboardActivityFilters } from "./types";
+import type { DashboardActivityFilters, DashboardStats, DashboardOverview, DashboardActivity } from "./types";
 import { usePostgrestClient } from "@/lib/hooks/usePostgrestClient";
+import type { UseQueryOptionsWithoutKeyAndFn } from "@/lib/api/types/query-options";
 
 /**
  * Hook to fetch dashboard statistics
  */
 export function useGetDashboardStats(
-  options?: Omit<UseQueryOptions, "queryKey" | "queryFn">,
+  options?: UseQueryOptionsWithoutKeyAndFn<DashboardStats>,
 ) {
   const apiClient = usePostgrestClient();
 
-  return useQuery({
+  return useQuery<DashboardStats, Error>({
     queryKey: queryKeys.dashboard.stats(),
     queryFn: async () => {
       if (!apiClient) {
@@ -33,11 +33,11 @@ export function useGetDashboardStats(
  * Hook to fetch dashboard overview
  */
 export function useGetDashboardOverview(
-  options?: Omit<UseQueryOptions, "queryKey" | "queryFn">,
+  options?: UseQueryOptionsWithoutKeyAndFn<DashboardOverview>,
 ) {
   const apiClient = usePostgrestClient();
 
-  return useQuery({
+  return useQuery<DashboardOverview, Error>({
     queryKey: queryKeys.dashboard.overview(),
     queryFn: async () => {
       if (!apiClient) {
@@ -55,11 +55,11 @@ export function useGetDashboardOverview(
  */
 export function useGetDashboardActivities(
   params?: DashboardActivityFilters,
-  options?: Omit<UseQueryOptions, "queryKey" | "queryFn">,
+  options?: UseQueryOptionsWithoutKeyAndFn<DashboardActivity[]>,
 ) {
   const apiClient = usePostgrestClient();
 
-  return useQuery({
+  return useQuery<DashboardActivity[], Error>({
     queryKey: queryKeys.dashboard.activity(params?.limit, params?.offset),
     queryFn: async () => {
       if (!apiClient) {

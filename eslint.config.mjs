@@ -56,7 +56,6 @@ const eslintConfig = defineConfig([
       "prefer-const": "error",
       "no-var": "error",
       eqeqeq: ["error", "always"],
-      curly: ["error", "all"],
     },
   },
 ]);

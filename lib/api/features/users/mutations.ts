@@ -3,7 +3,6 @@
  * React Query hooks for user mutations (write operations)
  */
 import { useMutation, useQueryClient } from "@tanstack/react-query";
-import type { UseMutationOptions } from "@tanstack/react-query";
 import { queryKeys } from "@/lib/api/config/query-keys";
 import { userService } from "./service";
 import { usePostgrestClient } from "@/lib/hooks/usePostgrestClient";
@@ -14,15 +13,13 @@ import type {
   UpdateUserRequest,
   UpdateUserVariables,
 } from "./user.api.types";
+import type { UseMutationOptionsWithoutFn } from "@/lib/api/types/query-options";
 
 /**
  * Hook to create a new user
  */
 export function useCreateUser(
-  options?: Omit<
-    UseMutationOptions<User, Error, CreateUserRequest>,
-    "mutationFn"
-  >,
+  options?: UseMutationOptionsWithoutFn<User, Error, CreateUserRequest>,
 ) {
   const apiClient = usePostgrestClient();
   const queryClient = useQueryClient();
@@ -54,10 +51,7 @@ export function useCreateUser(
  * Hook to update an existing user
  */
 export function useUpdateUser(
-  options?: Omit<
-    UseMutationOptions<User, Error, UpdateUserVariables>,
-    "mutationFn"
-  >,
+  options?: UseMutationOptionsWithoutFn<User, Error, UpdateUserVariables>,
 ) {
   const apiClient = usePostgrestClient();
   const queryClient = useQueryClient();
@@ -95,10 +89,7 @@ export function useUpdateUser(
  * Hook to delete a user
  */
 export function useDeleteUser(
-  options?: Omit<
-    UseMutationOptions<DeleteUserResult, Error, string>,
-    "mutationFn"
-  >,
+  options?: UseMutationOptionsWithoutFn<DeleteUserResult, Error, string>,
 ) {
   const apiClient = usePostgrestClient();
   const queryClient = useQueryClient();

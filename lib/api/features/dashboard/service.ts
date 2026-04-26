@@ -3,6 +3,7 @@
  */
 import type { PostgrestClient } from "@supabase/postgrest-js";
 import type { DashboardStats, DashboardActivity, DashboardOverview, DashboardActivityFilters } from "./types";
+import { DashboardSafeValidators } from "./validators";
 
 export const dashboardService = {
   /**
@@ -13,7 +14,15 @@ export const dashboardService = {
     if (error) {
       throw error;
     }
-    return data;
+
+    // Validate API response
+    const validation = DashboardSafeValidators.safeParseStats(data);
+    if (!validation.success) {
+      console.error("Dashboard stats validation error:", validation.error);
+      throw new Error(`Invalid dashboard stats data: ${validation.error.message}`);
+    }
+
+    return validation.data;
   },
 
   /**
@@ -43,6 +52,18 @@ export const dashboardService = {
     if (error) {
       throw error;
     }
+
+    // Validate API response data
+    if (data && Array.isArray(data)) {
+      for (const item of data) {
+        const validation = DashboardSafeValidators.safeParseActivity(item);
+        if (!validation.success) {
+          console.error("Dashboard activity validation error:", validation.error);
+          throw new Error(`Invalid activity data: ${validation.error.message}`);
+        }
+      }
+    }
+
     return data || [];
   },
 };

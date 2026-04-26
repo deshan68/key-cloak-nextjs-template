@@ -10,6 +10,8 @@ import type {
   UserFilters,
 } from "./user.api.types";
 import type { User } from "./user.types";
+import { userMapper } from "./user.mapper";
+import { UserSafeValidators } from "./user.validators";
 
 export const userService = {
   /**
@@ -19,7 +21,7 @@ export const userService = {
     apiClient: PostgrestClient,
     params?: UserFilters,
   ): Promise<UsersListResponse> => {
-    const query = apiClient.from("users").select("*");
+    const query = apiClient.from("app_user").select("*");
 
     if (params?.page && params?.limit) {
       const from = (params.page - 1) * params.limit;
@@ -30,8 +32,22 @@ export const userService = {
     if (error) {
       throw error;
     }
+
+    // Validate API response data
+    if (data && Array.isArray(data)) {
+      for (const item of data) {
+        const validation = UserSafeValidators.safeParseUser(item);
+        if (!validation.success) {
+          console.error("User validation error:", validation.error);
+          throw new Error(`Invalid user data: ${validation.error.message}`);
+        }
+      }
+    }
+
+    const mappedData = (data || []).map((user) => userMapper.toDomain(user));
+
     return {
-      data: data || [],
+      data: mappedData,
       total: (data || []).length,
       page: params?.page || 1,
       limit: params?.limit || 10,
@@ -53,7 +69,15 @@ export const userService = {
     if (error) {
       throw error;
     }
-    return data;
+
+    // Validate API response
+    const validation = UserSafeValidators.safeParseUser(data);
+    if (!validation.success) {
+      console.error("User validation error:", validation.error);
+      throw new Error(`Invalid user data: ${validation.error.message}`);
+    }
+
+    return userMapper.toDomain(data);
   },
 
   /**
@@ -71,7 +95,15 @@ export const userService = {
     if (error) {
       throw error;
     }
-    return newUser;
+
+    // Validate API response
+    const validation = UserSafeValidators.safeParseUser(newUser);
+    if (!validation.success) {
+      console.error("User validation error:", validation.error);
+      throw new Error(`Invalid user data: ${validation.error.message}`);
+    }
+
+    return userMapper.toDomain(newUser);
   },
 
   /**
@@ -91,7 +123,15 @@ export const userService = {
     if (error) {
       throw error;
     }
-    return updatedUser;
+
+    // Validate API response
+    const validation = UserSafeValidators.safeParseUser(updatedUser);
+    if (!validation.success) {
+      console.error("User validation error:", validation.error);
+      throw new Error(`Invalid user data: ${validation.error.message}`);
+    }
+
+    return userMapper.toDomain(updatedUser);
   },
 
   /**

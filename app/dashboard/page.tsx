@@ -1,5 +1,6 @@
 "use client";
 
+import { UsersList } from "@/docs/VALIDATION_EXAMPLES";
 import { useSession, signOut } from "next-auth/react";
 import Link from "next/link";
 
@@ -20,6 +21,7 @@ export default function Dashboard() {
 
   return (
     <main className="min-h-screen bg-linear-to-br from-blue-50 to-indigo-100 p-8">
+      <UsersList />
       <div className="max-w-4xl mx-auto">
         <div className="bg-white rounded-lg shadow-lg p-8">
           <div className="flex justify-between items-start mb-8">
