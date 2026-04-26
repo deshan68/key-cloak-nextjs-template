@@ -44,10 +44,7 @@ export default function RootLayout({
               <ClientProvider>
                 <SidebarProvider>
                   <AppSidebar />
-                  <main>
-                    <SidebarTrigger />
-                    {children}
-                  </main>
+                  <main>{children}</main>
                 </SidebarProvider>
               </ClientProvider>
             </ReactQueryProvider>

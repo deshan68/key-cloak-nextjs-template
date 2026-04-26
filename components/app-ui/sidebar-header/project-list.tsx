@@ -2,7 +2,7 @@
 
 import * as React from "react";
 import { useVirtualizer } from "@tanstack/react-virtual";
-import { MoreHorizontal, Circle } from "lucide-react";
+import { MoreHorizontal } from "lucide-react";
 import {
   SidebarGroup,
   SidebarGroupLabel,
@@ -19,14 +19,7 @@ import {
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
-import type { Project } from "./sidebar-data";
 import { useSidebarProjects } from "./use-sidebar-queries";
-
-const STATUS_COLOR: Record<Project["status"], string> = {
-  active: "text-emerald-500",
-  paused: "text-amber-500",
-  archived: "text-muted-foreground",
-};
 
 const ITEM_HEIGHT = 32;
 
@@ -48,14 +41,8 @@ export function ProjectsList({ search }: ProjectsListProps) {
   });
 
   return (
-    <SidebarGroup>
-      <SidebarGroupLabel>
-        Projects
-        <span className="ml-auto text-xs tabular-nums text-muted-foreground">
-          {isLoading ? "…" : projects.length}
-        </span>
-      </SidebarGroupLabel>
-
+    <SidebarGroup className="pr-0">
+      <SidebarGroupLabel>Projects</SidebarGroupLabel>
       <SidebarGroupContent>
         {isLoading ? (
           <SidebarMenu>
@@ -103,9 +90,6 @@ export function ProjectsList({ search }: ProjectsListProps) {
                           {project.emoji}
                         </span>
                         <span className="flex-1 truncate">{project.name}</span>
-                        <Circle
-                          className={`h-2 w-2 shrink-0 fill-current ${STATUS_COLOR[project.status]}`}
-                        />
                       </a>
                     </SidebarMenuButton>
 

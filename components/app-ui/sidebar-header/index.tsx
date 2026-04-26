@@ -1,13 +1,17 @@
 "use client";
 
-import { Search, PlusCircle, Star, File, Tag } from "lucide-react";
+import { Search, PlusCircle, Star, File, Tag, PanelLeft } from "lucide-react";
 import {
   SidebarHeader,
   SidebarMenu,
-  SidebarMenuItem,
+  SidebarMenuBadge,
   SidebarMenuButton,
+  SidebarMenuItem,
+  useSidebar,
 } from "@/components/ui/sidebar";
 import { SideBarHeaderItem } from "./side-bar-header-item";
+import Logo from "@/public/logo.svg";
+import Image from "next/image";
 
 const BASIC_CHAT_ITEMS = [
   {
@@ -38,17 +42,36 @@ const BASIC_CHAT_ITEMS = [
 ];
 
 export function SidebarHeaderSection() {
+  const { open, toggleSidebar } = useSidebar();
+
+  const handleLogoClick = (id: string) => {
+    if (id === "logo") toggleSidebar();
+  };
+
   return (
-    <SidebarHeader>
+    <SidebarHeader className="pb-0">
       <SidebarMenu className="gap-0">
-        <SidebarMenuItem>
-          <SidebarMenuButton className="font-semibold">
-            <span className="truncate text-lg">Chat App</span>
+        <SidebarMenuItem className="pb-2">
+          <SidebarMenuButton asChild>
+            <div
+              className="cursor-default"
+              onClick={() => handleLogoClick("logo")}
+            >
+              <Image src={Logo} alt="ChatGPT Logo" className="h-5 w-5" />
+              {open && <span className="text-sm font-medium">Emvia</span>}
+            </div>
           </SidebarMenuButton>
+          <SidebarMenuBadge className="ml-auto">
+            <PanelLeft className="ml-auto h-4 w-4 shrink-0" />
+          </SidebarMenuBadge>
         </SidebarMenuItem>
 
         {BASIC_CHAT_ITEMS.map((item) => (
-          <SideBarHeaderItem key={item.id} {...item} />
+          <SideBarHeaderItem
+            key={item.id}
+            {...item}
+            onClick={(name) => handleLogoClick(name)}
+          />
         ))}
       </SidebarMenu>
     </SidebarHeader>

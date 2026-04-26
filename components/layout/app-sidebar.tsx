@@ -5,13 +5,14 @@ import {
   Sidebar,
   SidebarContent,
   SidebarRail,
-  SidebarSeparator,
+  useSidebar,
 } from "@/components/ui/sidebar";
 import { SidebarHeaderSection } from "@/components/app-ui/sidebar-header";
 import { ProjectsList } from "../app-ui/sidebar-header/project-list";
 
 export function AppSidebar() {
   const [search] = React.useState("");
+  const { open } = useSidebar();
 
   function handleAddProject() {
     // Wire to your modal / sheet
@@ -23,8 +24,9 @@ export function AppSidebar() {
       <SidebarHeaderSection />
 
       <SidebarContent>
-        <SidebarSeparator />
-        <ProjectsList search={search} onAddProject={handleAddProject} />
+        {open && (
+          <ProjectsList search={search} onAddProject={handleAddProject} />
+        )}
       </SidebarContent>
 
       <SidebarRail />
