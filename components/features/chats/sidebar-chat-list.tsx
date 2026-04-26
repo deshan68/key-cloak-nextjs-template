@@ -2,7 +2,6 @@
 
 import * as React from "react";
 import { useVirtualizer } from "@tanstack/react-virtual";
-import { MessageSquare, Pin } from "lucide-react";
 import {
   SidebarGroup,
   SidebarGroupLabel,
@@ -12,24 +11,42 @@ import {
   SidebarMenuButton,
   SidebarMenuSkeleton,
 } from "@/components/ui/sidebar";
+import logo from "@/public/logo.svg";
 
 import { useGetChatsInfinite } from "@/lib/api/features/chats";
+import Image from "next/image";
 
-const ITEM_HEIGHT = 32;
+const ITEM_HEIGHT = 52; // Slightly taller to prevent description cut-off
 
-type ChatListProps = {
-  search: string;
-};
+// Truncate only when needed, append ellipsis
+function truncate(text: string | undefined | null, max: number): string {
+  if (!text) return "";
+  return text.length > max ? text.slice(0, max) + "…" : text;
+}
 
-export function ChatList({ search }: ChatListProps) {
+export function SidebarChatList() {
   const { data, isLoading, fetchNextPage, hasNextPage, isFetchingNextPage } =
-    useGetChatsInfinite({ search });
+    useGetChatsInfinite();
   const chats = data?.pages.flatMap((page) => page.data) || [];
   const parentRef = React.useRef<HTMLDivElement>(null);
 
+  // Dynamically calculate max height based on viewport
+  const [listMaxHeight, setListMaxHeight] = React.useState(540);
+
+  React.useEffect(() => {
+    function updateHeight() {
+      // Reserve space for sidebar header, group label, padding, etc.
+      const reserved = 160;
+      setListMaxHeight(Math.max(200, window.innerHeight - reserved));
+    }
+    updateHeight();
+    window.addEventListener("resize", updateHeight);
+    return () => window.removeEventListener("resize", updateHeight);
+  }, []);
+
   // eslint-disable-next-line react-hooks/incompatible-library
   const virtualizer = useVirtualizer({
-    count: chats.length + (hasNextPage ? 1 : 0), // Add 1 for loading indicator
+    count: chats.length + (hasNextPage ? 1 : 0),
     getScrollElement: () => parentRef.current,
     estimateSize: () => ITEM_HEIGHT,
     overscan: 8,
@@ -42,7 +59,7 @@ export function ChatList({ search }: ChatListProps) {
     if (!lastItem) return;
 
     if (
-      lastItem.index >= chats.length - 10 && // Trigger when 10 items from end
+      lastItem.index >= chats.length - 10 &&
       hasNextPage &&
       !isFetchingNextPage
     ) {
@@ -62,7 +79,7 @@ export function ChatList({ search }: ChatListProps) {
       <SidebarGroupContent>
         {isLoading ? (
           <SidebarMenu>
-            {Array.from({ length: 5 }).map((_, i) => (
+            {Array.from({ length: 10 }).map((_, i) => (
               <SidebarMenuItem key={i}>
                 <SidebarMenuSkeleton showIcon />
               </SidebarMenuItem>
@@ -70,12 +87,12 @@ export function ChatList({ search }: ChatListProps) {
           </SidebarMenu>
         ) : chats.length === 0 ? (
           <p className="px-2 py-4 text-center text-xs text-muted-foreground">
-            No chats match &ldquo;{search}&rdquo;
+            No chats yet. Start a new conversation!
           </p>
         ) : (
           <div
             ref={parentRef}
-            style={{ maxHeight: 540, overflowY: "auto" }}
+            style={{ maxHeight: listMaxHeight, overflowY: "auto" }}
             className="scrollbar-thin"
           >
             <SidebarMenu
@@ -86,7 +103,7 @@ export function ChatList({ search }: ChatListProps) {
             >
               {virtualizer.getVirtualItems().map((vItem) => {
                 if (vItem.index >= chats.length) {
-                  // Loading indicator
+                  // Loading indicator for next page
                   return (
                     <SidebarMenuItem
                       key="loading"
@@ -104,6 +121,16 @@ export function ChatList({ search }: ChatListProps) {
                 }
 
                 const chat = chats[vItem.index];
+
+                // Only truncate if the text is actually long
+                const displayName = chat.name
+                  ? truncate(chat.name, 22)
+                  : "Unnamed Chat";
+
+                const displayDescription = chat.description
+                  ? truncate(chat.description, 32)
+                  : "No description";
+
                 return (
                   <SidebarMenuItem
                     key={chat.id}
@@ -115,16 +142,35 @@ export function ChatList({ search }: ChatListProps) {
                       height: ITEM_HEIGHT,
                     }}
                   >
-                    <SidebarMenuButton asChild size="sm">
+                    <SidebarMenuButton asChild className="h-full py-1">
                       <a
                         href={`#chat-${chat.id}`}
                         className="flex items-center gap-2"
                       >
-                        <MessageSquare className="h-4 w-4" />
-                        {chat.isPinned && (
-                          <Pin className="h-3 w-3 text-yellow-500" />
-                        )}
-                        <span className="flex-1 truncate">{chat.name}</span>
+                        {/* Avatar icon */}
+                        <div className="shrink-0 rounded-full bg-secondary-foreground w-7 aspect-square flex items-center justify-center">
+                          <Image
+                            src={logo}
+                            alt="Chat"
+                            className="w-3/4 h-3/4"
+                          />
+                        </div>
+
+                        {/* Text block — min-w-0 so truncation works in flex */}
+                        <div className="flex flex-col min-w-0 flex-1 leading-tight">
+                          <span
+                            className="truncate font-medium text-sm leading-5"
+                            title={chat.name || "Unnamed Chat"}
+                          >
+                            {displayName}
+                          </span>
+                          <span
+                            className="truncate text-xs text-muted-foreground leading-4"
+                            title={chat.description || "No description"}
+                          >
+                            {displayDescription}
+                          </span>
+                        </div>
                       </a>
                     </SidebarMenuButton>
                   </SidebarMenuItem>

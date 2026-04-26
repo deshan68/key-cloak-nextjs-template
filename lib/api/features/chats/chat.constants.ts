@@ -8,10 +8,15 @@
 // ============================================
 export const CHAT_TYPES = {
   reflection: "reflection",
-  general: "general",
+  scenario: "scenario",
+  question: "question",
+  intervention: "intervention",
+  insight: "insight",
+  exercise: "exercise",
+  compass: "compass",
 } as const;
 
-export type ChatType = typeof CHAT_TYPES[keyof typeof CHAT_TYPES];
+export type ChatType = (typeof CHAT_TYPES)[keyof typeof CHAT_TYPES];
 
 // ============================================
 // Chat Status
@@ -115,10 +120,7 @@ export const CHATS_MESSAGES = {
 // Chat Filter Options
 // ============================================
 export const CHAT_FILTER_OPTIONS = {
-  types: [
-    { value: CHAT_TYPES.reflection, label: "Reflection" },
-    { value: CHAT_TYPES.general, label: "General" },
-  ],
+  types: [{ value: CHAT_TYPES.reflection, label: "Reflection" }],
   pinned: [
     { value: true, label: "Pinned" },
     { value: false, label: "Unpinned" },

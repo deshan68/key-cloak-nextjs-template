@@ -4,6 +4,7 @@
  * These schemas serve as the single source of truth for validation
  */
 import { z } from "zod";
+import { CHAT_TYPES } from "./chat.constants";
 
 /**
  * Schema for a single chat from API
@@ -16,7 +17,7 @@ export const ApiChatSchema = z.object({
   created_at: z.string("Invalid created_at format"),
   updated_at: z.string("Invalid updated_at format"),
   user_id: z.uuid("Invalid user ID format"),
-  chat_type: z.string().min(1, "Chat type is required"),
+  chat_type: z.enum(Object.values(CHAT_TYPES), "Invalid chat type"),
   description: z.string().optional(),
   is_pinned: z.boolean(),
   first_message: z.string().optional().nullable(),
@@ -38,7 +39,7 @@ export const ChatSchema = z.object({
   createdAt: z.date(),
   updatedAt: z.date(),
   userId: z.uuid("Invalid user ID"),
-  chatType: z.string().min(1, "Chat type is required"),
+  chatType: z.enum(Object.values(CHAT_TYPES), "Invalid chat type"),
   description: z.string().optional(),
   isPinned: z.boolean(),
   firstMessage: z.string().optional().nullable(),
@@ -69,7 +70,7 @@ export const CreateChatRequestSchema = z.object({
   thread_id: z.string().uuid("Invalid thread ID format"),
   name: z.string().min(1, "Name is required"),
   user_id: z.string().uuid("Invalid user ID format"),
-  chat_type: z.string().min(1, "Chat type is required"),
+  chat_type: z.enum(Object.values(CHAT_TYPES), "Invalid chat type"),
   description: z.string().optional(),
   is_pinned: z.boolean().optional(),
   first_message: z.string().optional().nullable(),
@@ -87,7 +88,7 @@ export const UpdateChatRequestSchema = z.object({
   thread_id: z.string().uuid("Invalid thread ID format").optional(),
   name: z.string().min(1, "Name must not be empty").optional(),
   user_id: z.string().uuid("Invalid user ID format").optional(),
-  chat_type: z.string().min(1, "Chat type must not be empty").optional(),
+  chat_type: z.enum(Object.values(CHAT_TYPES), "Invalid chat type").optional(),
   description: z.string().optional(),
   is_pinned: z.boolean().optional(),
   first_message: z
@@ -107,7 +108,7 @@ export type UpdateChatRequestType = z.infer<typeof UpdateChatRequestSchema>;
 export const ChatFiltersSchema = z.object({
   page: z.number().int().positive("Page must be positive").optional(),
   limit: z.number().int().positive("Limit must be positive").optional(),
-  chat_type: z.string().optional(),
+  chat_type: z.enum(Object.values(CHAT_TYPES), "Invalid chat type").optional(),
   search: z.string().optional(),
   user_id: z.string().uuid("Invalid user ID format").optional(),
   is_pinned: z.boolean().optional(),

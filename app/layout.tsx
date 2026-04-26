@@ -8,7 +8,7 @@ import {
 } from "@/components/providers/index";
 import { cn } from "@/lib/utils";
 import { ReduxProvider } from "@/components/providers/redux-provider";
-import { SidebarProvider, SidebarTrigger } from "@/components/ui/sidebar";
+import { SidebarProvider } from "@/components/ui/sidebar";
 import { AppSidebar } from "@/components/layout/app-sidebar";
 
 const inter = Inter({ subsets: ["latin"], variable: "--font-sans" });

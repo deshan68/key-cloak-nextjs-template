@@ -8,17 +8,16 @@ import {
   useSidebar,
 } from "@/components/ui/sidebar";
 import { SidebarHeaderSection } from "@/components/app-ui/sidebar-header";
-import { ChatList } from "../app-ui/sidebar-header/chat-list";
+import { SidebarChatList } from "../features/chats/sidebar-chat-list";
 
 export function AppSidebar() {
-  const [search] = React.useState("");
   const { open } = useSidebar();
 
   return (
     <Sidebar variant="sidebar" collapsible="icon">
       <SidebarHeaderSection />
 
-      <SidebarContent>{open && <ChatList search={search} />}</SidebarContent>
+      <SidebarContent>{open && <SidebarChatList />}</SidebarContent>
 
       <SidebarRail />
     </Sidebar>

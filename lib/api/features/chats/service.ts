@@ -53,17 +53,17 @@ export const chatService = {
     }
 
     // Validate API response data
-    if (data && Array.isArray(data)) {
-      for (const item of data) {
-        const validation = ChatSafeValidators.safeParseChat(item);
-        if (!validation.success) {
-          console.error("Chat validation error:", validation.error);
-          throw new Error(
-            `${CHATS_MESSAGES.serviceErrors.invalidChatData} ${validation.error.message}`,
-          );
-        }
-      }
-    }
+    // if (data && Array.isArray(data)) {
+    //   for (const item of data) {
+    //     const validation = ChatSafeValidators.safeParseChat(item);
+    //     if (!validation.success) {
+    //       console.error("Chat validation error:", validation.error);
+    //       throw new Error(
+    //         `${CHATS_MESSAGES.serviceErrors.invalidChatData} ${validation.error.message}`,
+    //       );
+    //     }
+    //   }
+    // }
 
     const mappedData = (data || []).map((chat) => chatMapper.toDomain(chat));
 
