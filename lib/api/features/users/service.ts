@@ -3,15 +3,15 @@
  * Contains all API calls related to user operations
  */
 import type { PostgrestClient } from "@supabase/postgrest-js";
+import type { User } from "./user.types";
+import { userMapper } from "./user.mapper";
+import { UserSafeValidators } from "./user.validators";
 import type {
   CreateUserRequest,
   UpdateUserRequest,
   UsersListResponse,
   UserFilters,
-  User,
-} from "./user.validators";
-import { userMapper } from "./user.mapper";
-import { UserSafeValidators } from "./user.validators";
+} from "./user.api.types";
 
 export const userService = {
   /**

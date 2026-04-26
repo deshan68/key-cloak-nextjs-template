@@ -1,12 +1,9 @@
-import type { ValidatedApiUser } from "./user.validators";
-
 /**
- * User domain model types are now imported from validators
- * which uses Zod schemas as the single source of truth
+ * User Type Definitions
+ * All types are inferred from Zod schemas in user.schemas.ts
+ * This ensures types always match the validation logic
  */
-export type { User } from "./user.validators";
+import type { UserType } from "./user.schemas";
 
-// Export as primary API user type
-export type ApiUser = ValidatedApiUser;
-
-export type UserRole = string;
+// Domain User type - shape after mapping to application format
+export type User = UserType;

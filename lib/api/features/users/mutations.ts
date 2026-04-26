@@ -10,11 +10,9 @@ import type {
   User,
   CreateUserRequest,
   UpdateUserRequest,
-} from "./user.validators";
-import type {
   UpdateUserVariables,
-  DeleteUserResult,
-} from "./user.api.types";
+} from "./user.types";
+import type { DeleteUserResult } from "./user.api.types";
 import type { UseMutationOptionsWithoutFn } from "@/lib/api/types/query-options";
 
 /**
