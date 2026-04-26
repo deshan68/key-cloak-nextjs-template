@@ -1,6 +1,14 @@
 "use client";
 
-import { Search, PlusCircle, Star, File, Tag, PanelLeft } from "lucide-react";
+import {
+  Search,
+  PlusCircle,
+  Star,
+  File,
+  Tag,
+  PanelLeft,
+  MessageCircle,
+} from "lucide-react";
 import {
   SidebarHeader,
   SidebarMenu,
@@ -26,16 +34,21 @@ const BASIC_CHAT_ITEMS = [
   },
   {
     id: "3",
+    name: "All chats",
+    icon: <MessageCircle className="mr-1 h-4 w-4 shrink-0" />,
+  },
+  {
+    id: "4",
     name: "Starred",
     icon: <Star className="mr-1 h-4 w-4 shrink-0" />,
   },
   {
-    id: "4",
+    id: "5",
     name: "Tags",
     icon: <Tag className="mr-1 h-4 w-4 shrink-0" />,
   },
   {
-    id: "5",
+    id: "6",
     name: "Files",
     icon: <File className="mr-1 h-4 w-4 shrink-0" />,
   },
