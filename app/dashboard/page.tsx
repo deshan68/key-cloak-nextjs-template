@@ -1,6 +1,6 @@
 "use client";
 
-import { UsersList } from "@/docs/VALIDATION_EXAMPLES";
+import { Button } from "@/components/ui/button";
 import { useSession, signOut } from "next-auth/react";
 import Link from "next/link";
 
@@ -21,7 +21,7 @@ export default function Dashboard() {
 
   return (
     <main className="min-h-screen bg-linear-to-br from-blue-50 to-indigo-100 p-8">
-      <UsersList />
+      <Button variant="secondary">Click me</Button>
       <div className="max-w-4xl mx-auto">
         <div className="rounded-lg shadow-lg p-8">
           <div className="flex justify-between items-start mb-8">
@@ -34,12 +34,12 @@ export default function Dashboard() {
                 <strong>{session?.user?.name || session?.user?.email}</strong>
               </p>
             </div>
-            <button
+            <Button
               onClick={() => signOut({ callbackUrl: "/" })}
-              className="bg-red-600 text-white px-4 py-2 rounded-lg hover:bg-red-700 transition"
+              variant="destructive"
             >
               Sign Out
-            </button>
+            </Button>
           </div>
 
           <div className="grid md:grid-cols-2 gap-6">
