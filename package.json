@@ -13,6 +13,7 @@
     "@tanstack/react-query": "^5.100.1",
     "@types/axios": "^0.9.36",
     "axios": "^1.15.0",
+    "jwt-decode": "^4.0.0",
     "keycloak-js": "^26.2.4",
     "next": "^16.2.4",
     "next-auth": "^4.24.14",

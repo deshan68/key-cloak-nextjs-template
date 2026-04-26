@@ -1,4 +1,4 @@
-import { logoutRequest, refreshTokenRequest } from "@/lib/oidc";
+import { isTokenRevoked, logoutRequest, refreshTokenRequest } from "@/lib/oidc";
 import NextAuth from "next-auth";
 import type { Account, User } from "next-auth";
 import type { JWT } from "next-auth/jwt";
@@ -72,8 +72,7 @@ const handler = NextAuth({
         };
       }
 
-      const now = Math.floor(Date.now() / 1000);
-      const isExpired = token.expires_at < now;
+      const isExpired = isTokenRevoked(token.access_token);
 
       if (!isExpired) {
         console.warn("Token still valid");

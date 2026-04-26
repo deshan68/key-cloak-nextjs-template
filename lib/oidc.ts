@@ -1,4 +1,5 @@
 import axios from "axios";
+import { jwtDecode, type JwtPayload } from "jwt-decode";
 
 const params = {
   client_id: process.env.NEXT_PUBLIC_KEYCLOAK_ID || "",
@@ -61,7 +62,7 @@ export async function refreshTokenRequest(refreshToken: string) {
           "Content-Type": "application/x-www-form-urlencoded",
         },
         withCredentials: true,
-      }
+      },
     );
 
     const data = response.data as TokenResponse;
@@ -102,11 +103,38 @@ export async function logoutRequest(refreshToken: string) {
         headers: {
           "Content-Type": "application/x-www-form-urlencoded",
         },
-      }
+      },
     );
     console.warn("Successfully logged out from Keycloak");
   } catch (error) {
     console.error("❌ Keycloak logout failed:", error);
     // Don't throw - logout should still complete even if Keycloak request fails
+  }
+}
+
+/**
+ * Check if token is revoked or blacklisted
+ * "Token is not active" usually means:
+ * 1. Token was revoked
+ * 2. User logged out elsewhere
+ * 3. User's session was invalidated
+ * 4. Token lifespan exceeded
+ */
+export function isTokenRevoked(token: string): boolean {
+  try {
+    const decoded: JwtPayload = jwtDecode(token);
+    const now = Math.floor(Date.now() / 1000);
+
+    if (!decoded.exp) {
+      console.warn("Token does not have exp claim - treating as revoked");
+      return true;
+    }
+
+    if (now >= decoded.exp) return true;
+
+    return false;
+  } catch (error) {
+    console.error("Error decoding token:", error);
+    return false;
   }
 }
