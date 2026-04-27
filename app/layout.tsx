@@ -9,7 +9,7 @@ import {
 import { cn } from "@/lib/utils";
 import { ReduxProvider } from "@/components/providers/redux-provider";
 import { SidebarProvider } from "@/components/ui/sidebar";
-import { AppSidebar } from "@/components/layout/app-sidebar";
+import { AppContentLayout, AppSidebar } from "@/components/layout";
 
 const inter = Inter({ subsets: ["latin"], variable: "--font-sans" });
 
@@ -44,7 +44,7 @@ export default function RootLayout({
               <ClientProvider>
                 <SidebarProvider>
                   <AppSidebar />
-                  <main>{children}</main>
+                  <AppContentLayout>{children}</AppContentLayout>
                 </SidebarProvider>
               </ClientProvider>
             </ReactQueryProvider>

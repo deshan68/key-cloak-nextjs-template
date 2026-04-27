@@ -1,6 +1,5 @@
 "use client";
 
-import * as React from "react";
 import {
   Sidebar,
   SidebarContent,
@@ -11,13 +10,16 @@ import { SidebarHeaderSection } from "@/components/app-ui/sidebar-header";
 import { SidebarChatList } from "../features/chats/sidebar-chat-list";
 
 export function AppSidebar() {
-  const { open } = useSidebar();
+  const { open, isMobile, openMobile } = useSidebar();
 
   return (
     <Sidebar variant="sidebar" collapsible="icon">
       <SidebarHeaderSection />
 
-      <SidebarContent>{open && <SidebarChatList />}</SidebarContent>
+      <SidebarContent>
+        {open && <SidebarChatList />}
+        {isMobile && openMobile && <SidebarChatList />}
+      </SidebarContent>
 
       <SidebarRail />
     </Sidebar>

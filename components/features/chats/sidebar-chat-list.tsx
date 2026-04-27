@@ -10,21 +10,18 @@ import {
   SidebarMenuItem,
   SidebarMenuButton,
   SidebarMenuSkeleton,
+  useSidebar,
 } from "@/components/ui/sidebar";
 import logo from "@/public/logo.svg";
 
 import { useGetChatsInfinite } from "@/lib/api/features/chats";
 import Image from "next/image";
+import { truncate } from "@/lib/utils";
 
 const ITEM_HEIGHT = 52; // Slightly taller to prevent description cut-off
 
-// Truncate only when needed, append ellipsis
-function truncate(text: string | undefined | null, max: number): string {
-  if (!text) return "";
-  return text.length > max ? text.slice(0, max) + "…" : text;
-}
-
 export function SidebarChatList() {
+  const { isMobile } = useSidebar();
   const { data, isLoading, fetchNextPage, hasNextPage, isFetchingNextPage } =
     useGetChatsInfinite();
   const chats = data?.pages.flatMap((page) => page.data) || [];
@@ -124,11 +121,11 @@ export function SidebarChatList() {
 
                 // Only truncate if the text is actually long
                 const displayName = chat.name
-                  ? truncate(chat.name, 22)
+                  ? truncate(chat.name, isMobile ? 32 : 22)
                   : "Unnamed Chat";
 
                 const displayDescription = chat.description
-                  ? truncate(chat.description, 32)
+                  ? truncate(chat.description, isMobile ? 50 : 32)
                   : "No description";
 
                 return (
