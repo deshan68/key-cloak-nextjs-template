@@ -1,15 +1,11 @@
 "use client";
 
-import React, { createContext, useContext, useState } from "react";
-
-type SidebarSection =
-  | "chats"
-  | "search"
-  | "all-chats"
-  | "starred"
-  | "tags"
-  | "files"
-  | null;
+import React, { createContext, useContext, useState, useEffect } from "react";
+import { usePathname } from "next/navigation";
+import {
+  type SidebarSection,
+  ROUTE_TO_SECTION_MAP,
+} from "@/lib/config/routes-config";
 
 interface SidebarContextType {
   activeSection: SidebarSection;
@@ -26,8 +22,18 @@ export function SidebarContextProvider({
 }: {
   children: React.ReactNode;
 }) {
+  const pathname = usePathname();
   const [activeSection, setActiveSection] = useState<SidebarSection>("chats");
   const [isContentOpen, setIsContentOpen] = useState(false);
+
+  // Sync active section with current route
+  useEffect(() => {
+    const section = ROUTE_TO_SECTION_MAP[pathname] || null;
+    if (section) {
+      // eslint-disable-next-line react-hooks/set-state-in-effect
+      setActiveSection(section);
+    }
+  }, [pathname]);
 
   const toggleContent = () => setIsContentOpen((prev) => !prev);
 

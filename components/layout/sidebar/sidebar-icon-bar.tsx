@@ -2,14 +2,6 @@
 
 import { useRouter } from "next/navigation";
 import {
-  Search,
-  MessageCircle,
-  Star,
-  Tag,
-  SquarePen,
-  Files,
-} from "lucide-react";
-import {
   Tooltip,
   TooltipContent,
   TooltipTrigger,
@@ -17,82 +9,28 @@ import {
 } from "@/components/ui/tooltip";
 import { cn } from "@/lib/utils";
 import { useSidebarSection } from "@/lib/contexts/sidebar-context";
+import { ROUTES_CONFIG } from "@/lib/config/routes-config";
 import Image from "next/image";
 import Logo from "@/public/logo.svg";
-
-const SIDEBAR_ICONS = [
-  {
-    id: "1",
-    name: "New Chat",
-    icon: SquarePen,
-    section: "chats" as const,
-  },
-  {
-    id: "2",
-    name: "Search",
-    icon: Search,
-    section: "search" as const,
-  },
-  {
-    id: "3",
-    name: "All Chats",
-    icon: MessageCircle,
-    section: "all-chats" as const,
-  },
-  {
-    id: "4",
-    name: "Starred",
-    icon: Star,
-    section: "starred" as const,
-  },
-  {
-    id: "5",
-    name: "Tags",
-    icon: Tag,
-    section: "tags" as const,
-  },
-  {
-    id: "6",
-    name: "Files",
-    icon: Files,
-    section: "files" as const,
-  },
-];
 
 export function SidebarIconBar() {
   const router = useRouter();
   const { activeSection, setActiveSection, setIsContentOpen, toggleContent } =
     useSidebarSection();
 
-  const handleIconClick = (section: typeof activeSection) => {
+  const handleIconClick = (routeConfig: (typeof ROUTES_CONFIG)[0]) => {
+    const { section, path, showContentPanel } = routeConfig;
+
     // Set active section for icon highlighting
     setActiveSection(section);
 
-    // Navigate to dedicated routes for these sections
-    if (section === "chats") {
-      router.push("/new");
-      setIsContentOpen(false);
-      return;
+    // Navigate to the route if it exists
+    if (path) {
+      router.push(path);
     }
 
-    if (section === "files") {
-      router.push("/files");
-      setIsContentOpen(false);
-      return;
-    }
-
-    if (section === "tags") {
-      router.push("/tags");
-      setIsContentOpen(false);
-      return;
-    }
-
-    if (section === "all-chats") {
-      router.push("/recents");
-    }
-
-    // Open the content panel for other sections
-    setIsContentOpen(true);
+    // Set content panel visibility based on route config
+    setIsContentOpen(showContentPanel);
   };
 
   return (
@@ -119,15 +57,15 @@ export function SidebarIconBar() {
 
         {/* Icon Buttons */}
         <nav className="flex flex-col gap-1">
-          {SIDEBAR_ICONS.map((item) => {
-            const Icon = item.icon;
-            const isActive = activeSection === item.section;
+          {ROUTES_CONFIG.map((route) => {
+            const Icon = route.icon;
+            const isActive = activeSection === route.section;
 
             return (
-              <Tooltip key={item.id} delayDuration={0}>
+              <Tooltip key={route.id} delayDuration={0}>
                 <TooltipTrigger asChild>
                   <button
-                    onClick={() => handleIconClick(item.section)}
+                    onClick={() => handleIconClick(route)}
                     className={cn(
                       "relative flex h-10 w-10 items-center justify-center rounded-lg transition-all",
                       isActive
@@ -138,7 +76,7 @@ export function SidebarIconBar() {
                     <Icon className="h-5 w-5" />
                   </button>
                 </TooltipTrigger>
-                <TooltipContent side="right">{item.name}</TooltipContent>
+                <TooltipContent side="right">{route.label}</TooltipContent>
               </Tooltip>
             );
           })}
