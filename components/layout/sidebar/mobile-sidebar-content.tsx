@@ -1,7 +1,7 @@
 "use client";
 
 import { useRouter } from "next/navigation";
-import { PlusCircle, Search, MessageCircle, Star, Tag } from "lucide-react";
+import { PlusCircle, Search, MessageCircle, Star, Tag, Files } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { useSidebarSection } from "@/lib/contexts/sidebar-context";
 import { SidebarContentPanelInner } from "./sidebar-content-panel-inner";
@@ -37,6 +37,12 @@ const SIDEBAR_ICONS = [
     icon: Tag,
     section: "tags" as const,
   },
+  {
+    id: "6",
+    name: "Files",
+    icon: Files,
+    section: "files" as const,
+  },
 ];
 
 export function MobileSidebarContent() {
@@ -44,9 +50,19 @@ export function MobileSidebarContent() {
   const { activeSection, setActiveSection } = useSidebarSection();
 
   const handleItemClick = (section: typeof activeSection) => {
-    // Navigate to /new for "New Chat" instead of showing sidebar
+    // Navigate to dedicated routes for these sections
     if (section === "chats") {
       router.push("/new");
+      return;
+    }
+
+    if (section === "files") {
+      router.push("/files");
+      return;
+    }
+
+    if (section === "tags") {
+      router.push("/tags");
       return;
     }
 

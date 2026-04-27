@@ -9,7 +9,12 @@ import {
 import { useSidebarSection } from "@/lib/contexts/sidebar-context";
 import { SidebarChatList } from "@/components/features/chats/sidebar-chat-list";
 import { ChevronLeft } from "lucide-react";
-import { SearchSection, StarredSection, TagsSection } from "./sidebar-sections";
+import {
+  FilesSection,
+  SearchSection,
+  StarredSection,
+  TagsSection,
+} from "./sidebar-sections";
 
 const SECTION_TITLES: Record<string, string> = {
   chats: "Chats",
@@ -17,6 +22,7 @@ const SECTION_TITLES: Record<string, string> = {
   "all-chats": "All Chats",
   starred: "Starred",
   tags: "Tags",
+  files: "Files",
 };
 
 export function SidebarContentPanel() {
@@ -39,6 +45,8 @@ export function SidebarContentPanel() {
         return <StarredSection />;
       case "tags":
         return <TagsSection />;
+      case "files":
+        return <FilesSection />;
       default:
         return null;
     }

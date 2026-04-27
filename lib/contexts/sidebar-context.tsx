@@ -2,12 +2,13 @@
 
 import React, { createContext, useContext, useState } from "react";
 
-type SidebarSection = 
-  | "chats" 
-  | "search" 
-  | "all-chats" 
-  | "starred" 
-  | "tags" 
+type SidebarSection =
+  | "chats"
+  | "search"
+  | "all-chats"
+  | "starred"
+  | "tags"
+  | "files"
   | null;
 
 interface SidebarContextType {
@@ -49,7 +50,7 @@ export function useSidebarSection() {
   const context = useContext(SidebarContext);
   if (!context) {
     throw new Error(
-      "useSidebarSection must be used within SidebarContextProvider"
+      "useSidebarSection must be used within SidebarContextProvider",
     );
   }
   return context;

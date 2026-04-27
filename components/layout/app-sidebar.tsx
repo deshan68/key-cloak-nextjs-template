@@ -20,10 +20,16 @@ export function AppSidebar() {
   const pathname = usePathname();
   const { setActiveSection, setIsContentOpen } = useSidebarSection();
 
-  // When on /new route, set chats as active and hide content panel
+  // When on /new, /files, or /tags routes, set the appropriate section as active and hide content panel
   useEffect(() => {
     if (pathname === "/new") {
       setActiveSection("chats");
+      setIsContentOpen(false);
+    } else if (pathname === "/files") {
+      setActiveSection("files");
+      setIsContentOpen(false);
+    } else if (pathname === "/tags") {
+      setActiveSection("tags");
       setIsContentOpen(false);
     }
   }, [pathname, setActiveSection, setIsContentOpen]);

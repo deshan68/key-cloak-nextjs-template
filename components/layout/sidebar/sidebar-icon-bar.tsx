@@ -1,7 +1,14 @@
 "use client";
 
 import { useRouter } from "next/navigation";
-import { Search, MessageCircle, Star, Tag, SquarePen } from "lucide-react";
+import {
+  Search,
+  MessageCircle,
+  Star,
+  Tag,
+  SquarePen,
+  Files,
+} from "lucide-react";
 import {
   Tooltip,
   TooltipContent,
@@ -44,6 +51,12 @@ const SIDEBAR_ICONS = [
     icon: Tag,
     section: "tags" as const,
   },
+  {
+    id: "6",
+    name: "Files",
+    icon: Files,
+    section: "files" as const,
+  },
 ];
 
 export function SidebarIconBar() {
@@ -52,16 +65,30 @@ export function SidebarIconBar() {
     useSidebarSection();
 
   const handleIconClick = (section: typeof activeSection) => {
-    // Navigate to /new for "New Chat" instead of opening sidebar
+    // Set active section for icon highlighting
     setActiveSection(section);
 
+    // Navigate to dedicated routes for these sections
     if (section === "chats") {
       router.push("/new");
       setIsContentOpen(false);
       return;
     }
 
-    setIsContentOpen(true); // Open the content panel when an icon is clicked
+    if (section === "files") {
+      router.push("/files");
+      setIsContentOpen(false);
+      return;
+    }
+
+    if (section === "tags") {
+      router.push("/tags");
+      setIsContentOpen(false);
+      return;
+    }
+
+    // Open the content panel for other sections
+    setIsContentOpen(true);
   };
 
   return (
