@@ -19,7 +19,7 @@ import {
 const SECTION_TITLES: Record<string, string> = {
   chats: "Chats",
   search: "Search",
-  "all-chats": "All Chats",
+  "all-chats": "Chats",
   starred: "Starred",
   tags: "Tags",
   files: "Files",

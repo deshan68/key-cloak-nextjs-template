@@ -53,7 +53,7 @@ export const ROUTES_CONFIG: RouteConfig[] = [
   {
     id: "3",
     section: "all-chats",
-    label: "All Chats",
+    label: "Chats",
     icon: MessageCircle,
     path: "/recents",
     showContentPanel: true,
@@ -104,7 +104,9 @@ export const ROUTE_TO_SECTION_MAP: Record<string, SidebarSection> = {
 /**
  * Get route config by section
  */
-export function getRouteConfigBySection(section: SidebarSection): RouteConfig | undefined {
+export function getRouteConfigBySection(
+  section: SidebarSection,
+): RouteConfig | undefined {
   return ROUTES_CONFIG.find((route) => route.section === section);
 }
 
