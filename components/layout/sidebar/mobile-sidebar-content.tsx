@@ -1,5 +1,6 @@
 "use client";
 
+import { useRouter } from "next/navigation";
 import { PlusCircle, Search, MessageCircle, Star, Tag } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { useSidebarSection } from "@/lib/contexts/sidebar-context";
@@ -39,7 +40,18 @@ const SIDEBAR_ICONS = [
 ];
 
 export function MobileSidebarContent() {
+  const router = useRouter();
   const { activeSection, setActiveSection } = useSidebarSection();
+
+  const handleItemClick = (section: typeof activeSection) => {
+    // Navigate to /new for "New Chat" instead of showing sidebar
+    if (section === "chats") {
+      router.push("/new");
+      return;
+    }
+
+    setActiveSection(section);
+  };
 
   return (
     <div className="flex h-full flex-col">
@@ -53,7 +65,7 @@ export function MobileSidebarContent() {
             return (
               <button
                 key={item.id}
-                onClick={() => setActiveSection(item.section)}
+                onClick={() => handleItemClick(item.section)}
                 className={cn(
                   "flex items-center gap-2 rounded-lg px-3 py-2 transition-all duration-300",
                   isActive

@@ -9,7 +9,7 @@ import {
 import { useSidebarSection } from "@/lib/contexts/sidebar-context";
 import { SidebarChatList } from "@/components/features/chats/sidebar-chat-list";
 import { ChevronLeft } from "lucide-react";
-import { AllChatsSection, SearchSection, StarredSection, TagsSection } from "./sidebar-sections";
+import { SearchSection, StarredSection, TagsSection } from "./sidebar-sections";
 
 const SECTION_TITLES: Record<string, string> = {
   chats: "Chats",
@@ -30,11 +30,11 @@ export function SidebarContentPanel() {
   const renderSectionContent = () => {
     switch (activeSection) {
       case "chats":
-        return <SidebarChatList />;
+        return null;
       case "search":
         return <SearchSection />;
       case "all-chats":
-        return <AllChatsSection />;
+        return <SidebarChatList />;
       case "starred":
         return <StarredSection />;
       case "tags":

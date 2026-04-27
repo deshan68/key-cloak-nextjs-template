@@ -1,5 +1,6 @@
 "use client";
 
+import { useRouter } from "next/navigation";
 import { Search, MessageCircle, Star, Tag, SquarePen } from "lucide-react";
 import {
   Tooltip,
@@ -46,11 +47,20 @@ const SIDEBAR_ICONS = [
 ];
 
 export function SidebarIconBar() {
+  const router = useRouter();
   const { activeSection, setActiveSection, setIsContentOpen, toggleContent } =
     useSidebarSection();
 
   const handleIconClick = (section: typeof activeSection) => {
+    // Navigate to /new for "New Chat" instead of opening sidebar
     setActiveSection(section);
+
+    if (section === "chats") {
+      router.push("/new");
+      setIsContentOpen(false);
+      return;
+    }
+
     setIsContentOpen(true); // Open the content panel when an icon is clicked
   };
 
