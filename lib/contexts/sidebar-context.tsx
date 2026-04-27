@@ -27,7 +27,7 @@ export function SidebarContextProvider({
   children: React.ReactNode;
 }) {
   const [activeSection, setActiveSection] = useState<SidebarSection>("chats");
-  const [isContentOpen, setIsContentOpen] = useState(true);
+  const [isContentOpen, setIsContentOpen] = useState(false);
 
   const toggleContent = () => setIsContentOpen((prev) => !prev);
 

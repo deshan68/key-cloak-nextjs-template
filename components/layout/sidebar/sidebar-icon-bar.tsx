@@ -87,6 +87,10 @@ export function SidebarIconBar() {
       return;
     }
 
+    if (section === "all-chats") {
+      router.push("/recents");
+    }
+
     // Open the content panel for other sections
     setIsContentOpen(true);
   };
