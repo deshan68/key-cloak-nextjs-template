@@ -21,7 +21,7 @@ import { SideBarHeaderItem } from "./side-bar-header-item";
 import Logo from "@/public/logo.svg";
 import Image from "next/image";
 
-const BASIC_CHAT_ITEMS = [
+const SIDEBAR_STATIC_ITEMS = [
   {
     id: "1",
     name: "New chat",
@@ -79,7 +79,7 @@ export function SidebarHeaderSection() {
           </SidebarMenuBadge>
         </SidebarMenuItem>
 
-        {BASIC_CHAT_ITEMS.map((item) => (
+        {SIDEBAR_STATIC_ITEMS.map((item) => (
           <SideBarHeaderItem
             key={item.id}
             {...item}
