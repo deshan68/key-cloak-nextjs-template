@@ -4,7 +4,6 @@ import * as React from "react";
 import { useVirtualizer } from "@tanstack/react-virtual";
 import {
   SidebarGroup,
-  SidebarGroupLabel,
   SidebarGroupContent,
   SidebarMenu,
   SidebarMenuItem,
@@ -72,7 +71,6 @@ export function SidebarChatList() {
 
   return (
     <SidebarGroup className="pr-0">
-      <SidebarGroupLabel>Chats</SidebarGroupLabel>
       <SidebarGroupContent>
         {isLoading ? (
           <SidebarMenu>
