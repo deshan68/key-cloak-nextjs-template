@@ -1,11 +1,13 @@
 "use client";
 
 import { useSidebarSection } from "@/lib/contexts/sidebar-context";
+import {
+  AllChatsSection,
+  SearchSection,
+  StarredSection,
+  TagsSection,
+} from "./sidebar-sections";
 import { SidebarChatList } from "@/components/features/chats/sidebar-chat-list";
-import { SearchSection } from "./sidebar-sections/search-section";
-import { AllChatsSection } from "./sidebar-sections/all-chats-section";
-import { StarredSection } from "./sidebar-sections/starred-section";
-import { TagsSection } from "./sidebar-sections/tags-section";
 
 export function SidebarContentPanelInner() {
   const { activeSection } = useSidebarSection();

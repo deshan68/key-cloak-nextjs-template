@@ -3,22 +3,20 @@
 import {
   SidebarGroup,
   SidebarGroupContent,
-  SidebarGroupLabel,
   SidebarMenu,
   SidebarMenuItem,
   SidebarMenuButton,
 } from "@/components/ui/sidebar";
 
-export function TagsSection() {
+export function StarredSection() {
   return (
     <SidebarGroup>
-      <SidebarGroupLabel>Tags</SidebarGroupLabel>
       <SidebarGroupContent>
         <SidebarMenu>
           <SidebarMenuItem>
             <SidebarMenuButton disabled>
               <span className="text-xs text-muted-foreground">
-                No tags created yet
+                No starred chats yet
               </span>
             </SidebarMenuButton>
           </SidebarMenuItem>

@@ -8,11 +8,8 @@ import {
 } from "@/components/ui/sidebar";
 import { useSidebarSection } from "@/lib/contexts/sidebar-context";
 import { SidebarChatList } from "@/components/features/chats/sidebar-chat-list";
-import { SearchSection } from "./sidebar-sections/search-section";
-import { AllChatsSection } from "./sidebar-sections/all-chats-section";
-import { StarredSection } from "./sidebar-sections/starred-section";
-import { TagsSection } from "./sidebar-sections/tags-section";
 import { ChevronLeft } from "lucide-react";
+import { AllChatsSection, SearchSection, StarredSection, TagsSection } from "./sidebar-sections";
 
 const SECTION_TITLES: Record<string, string> = {
   chats: "Chats",

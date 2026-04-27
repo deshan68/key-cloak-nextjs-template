@@ -1,6 +1,6 @@
 "use client";
 
-import { PlusCircle, Search, MessageCircle, Star, Tag } from "lucide-react";
+import { Search, MessageCircle, Star, Tag, SquarePen } from "lucide-react";
 import {
   Tooltip,
   TooltipContent,
@@ -16,7 +16,7 @@ const SIDEBAR_ICONS = [
   {
     id: "1",
     name: "New Chat",
-    icon: PlusCircle,
+    icon: SquarePen,
     section: "chats" as const,
   },
   {
@@ -95,9 +95,6 @@ export function SidebarIconBar() {
                     )}
                   >
                     <Icon className="h-5 w-5" />
-                    {isActive && (
-                      <div className="absolute -right-1 top-1/2 h-1 w-1 -translate-y-1/2 rounded-full bg-primary" />
-                    )}
                   </button>
                 </TooltipTrigger>
                 <TooltipContent side="right">{item.name}</TooltipContent>

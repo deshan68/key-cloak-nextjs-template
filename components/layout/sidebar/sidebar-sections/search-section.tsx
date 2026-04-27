@@ -1,16 +1,11 @@
 "use client";
 
 import { Input } from "@/components/ui/input";
-import {
-  SidebarGroup,
-  SidebarGroupContent,
-  SidebarGroupLabel,
-} from "@/components/ui/sidebar";
+import { SidebarGroup, SidebarGroupContent } from "@/components/ui/sidebar";
 
 export function SearchSection() {
   return (
     <SidebarGroup>
-      <SidebarGroupLabel>Search</SidebarGroupLabel>
       <SidebarGroupContent>
         <div className="space-y-3">
           <Input
